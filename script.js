@@ -1,4 +1,4 @@
-//Current Date Display
+// Current Date Display
 document.addEventListener('DOMContentLoaded', function () {
     const currentDateElements = document.querySelectorAll('.current-date');
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -9,81 +9,26 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-//Hamburger Menu 
-
+// Hamburger Menu Toggle
 document.addEventListener('DOMContentLoaded', function () {
     const hamburger = document.querySelector('.hamburger');
     const navLinks = document.querySelector('.nav-links');
 
     hamburger.addEventListener('click', function () {
-        // Toggle the 'active' class on the navigation links
         navLinks.classList.toggle('active');
-        
-        // Check if the menu is open
         const isMenuOpen = navLinks.classList.contains('active');
-        
-        // Update the 'aria-expanded' attribute for accessibility
         hamburger.setAttribute('aria-expanded', isMenuOpen);
-
-        // Change the hamburger icon to 'X' when the menu is open, and back to bars when closed
-        if (isMenuOpen) {
-            hamburger.innerHTML = '<i class="fas fa-times"></i>'; // Close icon (X)
-        } else {
-            hamburger.innerHTML = '<i class="fas fa-bars"></i>'; // Open icon (bars)
-        }
+        hamburger.innerHTML = isMenuOpen ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
     });
-});
 
-//Close Mobile Menu When a Link is Clicked  
-
-document.addEventListener('DOMContentLoaded', function () {
-    const hamburger = document.querySelector('.hamburger');
-    const navLinks = document.querySelector('.nav-links');
-
+    // Close Mobile Menu When a Link is Clicked
     navLinks.addEventListener('click', function (event) {
-        // Check if the clicked element is an anchor tag (link)
         if (event.target.tagName === 'A') {
-            // Remove the 'active' class to close the menu
             navLinks.classList.remove('active');
-            
-            // Update the 'aria-expanded' attribute to false
             hamburger.setAttribute('aria-expanded', false);
-            
-            // Reset the hamburger icon to bars
             hamburger.innerHTML = '<i class="fas fa-bars"></i>';
         }
     });
-});
-
-//Search Functionality
-document.getElementById('search-button').addEventListener('click', function() {
-    const query = document.getElementById('search-bar').value.trim();
-    if (query) {
-        fetch(`/search?query=${encodeURIComponent(query)}`)
-            .then(response => response.json())
-            .then(data => {
-                const resultsContainer = document.getElementById('search-results');
-                resultsContainer.innerHTML = '';
-                if (data.length > 0) {
-                    data.forEach(item => {
-                        const resultItem = document.createElement('div');
-                        resultItem.textContent = item.title;
-                        resultsContainer.appendChild(resultItem);
-                    });
-                } else {
-                    resultsContainer.textContent = 'No results found.';
-                }
-            })
-            .catch(error => console.error('Error:', error));
-    } else {
-        alert('Please enter something to search.');
-    }
-});
-
-document.getElementById('search-bar').addEventListener('keypress', function(event) {
-    if (event.key === 'Enter') {
-        document.getElementById('search-button').click();
-    }
 });
 
 // Dark Mode Toggle
@@ -111,14 +56,11 @@ document.addEventListener('DOMContentLoaded', function () {
 // Back to Top Button
 const backToTop = document.getElementById("backToTop");
 
-// Initially hide the button
-backToTop.style.display = "none";
-
 window.onscroll = function () {
     if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
-        backToTop.style.display = "flex"; // Show the button
+        backToTop.style.display = "flex";
     } else {
-        backToTop.style.display = "none"; // Hide the button
+        backToTop.style.display = "none";
     }
 };
 
@@ -126,39 +68,37 @@ backToTop.addEventListener('click', function () {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
+// Share Button Functionality
+const shareFloatingButton = document.getElementById('sharefloatingButton');
+const shareOptions = document.getElementById('shareOptions');
 
-    // Share Button
-    const shareFloatingButton = document.getElementById('sharefloatingButton');
-    const shareOptions = document.getElementById('shareOptions');
+shareFloatingButton.addEventListener('click', function (event) {
+    event.stopPropagation();
+    shareOptions.classList.toggle('show');
+});
 
-    shareFloatingButton.addEventListener('click', function (event) {
-        event.stopPropagation();
-        shareOptions.classList.toggle('show');
-    });
+// Chat Button Functionality
+const chatFloatingButton = document.getElementById('chatfloating-Button');
+const chatOptions = document.getElementById('chatOptions');
 
-    // Chat Button
-    const chatFloatingButton = document.getElementById('chatfloating-Button');
-    const chatOptions = document.getElementById('chatOptions');
-    
-    // Toggle chat options on button click
-    chatFloatingButton.addEventListener('click', function (event) {
-        event.stopPropagation(); // Prevent the click from bubbling up
-        const isOpen = chatOptions.classList.toggle('show'); // Toggle the dropdown
-        chatFloatingButton.setAttribute('aria-expanded', isOpen); // Update aria-expanded
-    });
-    
-    // Close chat options when clicking outside
-    document.addEventListener('click', function (event) {
-        if (!chatFloatingButton.contains(event.target) && !chatOptions.contains(event.target)) {
-            chatOptions.classList.remove('show'); // Hide the dropdown
-            chatFloatingButton.setAttribute('aria-expanded', 'false'); // Update aria-expanded
-        }
-    });
-    
-    // Prevent chat options from closing when interacting with the dropdown
-    chatOptions.addEventListener('click', function (event) {
-        event.stopPropagation(); // Prevent clicks inside the dropdown from closing it
-    });
+chatFloatingButton.addEventListener('click', function (event) {
+    event.stopPropagation();
+    const isOpen = chatOptions.classList.toggle('show');
+    chatFloatingButton.setAttribute('aria-expanded', isOpen);
+});
+
+// Close chat options when clicking outside
+document.addEventListener('click', function (event) {
+    if (!chatFloatingButton.contains(event.target) && !chatOptions.contains(event.target)) {
+        chatOptions.classList.remove('show');
+        chatFloatingButton.setAttribute('aria-expanded', 'false');
+    }
+});
+
+// Prevent chat options from closing when interacting with the dropdown
+chatOptions.addEventListener('click', function (event) {
+    event.stopPropagation();
+});
 
 // Share on WhatsApp
 function shareOnWhatsApp() {
